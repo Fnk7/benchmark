@@ -12,5 +12,5 @@ public:
     virtual bool check() = 0;
     virtual void release() = 0;
     void evaluate();
-}
+};
 
