@@ -5,7 +5,7 @@
 
 using namespace std;
 
-static void *Workload::aligned_malloc(size_t size, size_t alignment)
+void *Workload::aligned_malloc(size_t size, size_t alignment)
 {
     if (alignment < 3)
         alignment = 3;
@@ -20,9 +20,9 @@ static void *Workload::aligned_malloc(size_t size, size_t alignment)
     return (void *)p2;
 }
 
-static void Workload::aligned_free(void *p)
+void Workload::aligned_free(void *p)
 {
-    free(((void **)p)[-1]);
+    delete ((uint8_t **)p)[-1];
 }
 
 void Workload::evaluate()
