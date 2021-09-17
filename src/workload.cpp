@@ -5,15 +5,24 @@
 
 using namespace std;
 
-void *Workload::align_malloc(size_t size, size_t alignment)
+static void *Workload::aligned_malloc(size_t size, size_t alignment)
 {
-    // TODO
-    return (void *)0;
+    if (alignment < 3)
+        alignment = 3;
+    if (alignment > 8)
+        alignment = 8;
+    alignment = 1 << alignment;
+    size_t offset = alignment -1 + sizeof(uint8_t *);
+    uint8_t *p1 = new uint8_t[size + offset];
+    offset = offset - ((size_t)(p1 + offset) & (alignment - 1));
+    void **p2 = (void **)(p1 + offset);
+    p2[-1] = p1;
+    return (void *)p2;
 }
 
-void Workload::align_free()
+static void Workload::aligned_free(void *p)
 {
-    // TODO
+    free(((void **)p)[-1]);
 }
 
 void Workload::evaluate()
@@ -25,13 +34,11 @@ void Workload::evaluate()
     run();
     auto end = clock();
     // check
-    bool success = check();
-    if (success)
+    if (check())
         cout << "Used clock: " << (end - begin) << endl;
     else
         cout << "Check failed!!!" << endl << "Used clock: " << (end - begin) << endl;
     // release
     release();
-    return success ? 0 : 1;
 }
 
