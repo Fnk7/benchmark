@@ -8,7 +8,8 @@ public:
     void align_free();
     virtual void init() = delete;
     virtual void run() = delete;
-    virtual void check() = delete();
+    virtual bool check() = delete();
     virtual void release() = delete();
     void evaluate();
 }
+
