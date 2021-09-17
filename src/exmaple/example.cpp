@@ -1,5 +1,6 @@
 #include "workload.h"
 
+#include <string>
 #include <iostream>
 #include <algorithm>
 
@@ -8,25 +9,26 @@ using namespace std;
 class Example : public Workload
 {
 private:
-    const int size = 64 * 2000;
-    float *a, *b, *c;
+    string datapath;
+    int size;
+    float *a, *b, *c, *c2;
 
 public:
+    Example(string datapath) : datapath(move(datapath)) {}
+
     void init()
     {
-        cout << "init()" << endl;
+        cout << "Init:" << endl;
+        load_bin(datapath + "/size.bin", &size, sizeof(size));
+        cout << "    size is " << size << endl;
         a = (float *)aligned_malloc(size * sizeof(float), 8);
         b = (float *)aligned_malloc(size * sizeof(float), 8);
         c = (float *)aligned_malloc(size * sizeof(float), 8);
-        cout << a << endl;
-        cout << b << endl;
-        cout << c << endl;
-        for (int i = 0; i < size; i++)
-        {
-            a[i] = 1.0 * i;
-            b[i] = i & 1 == 0 ? 0.01 * i : 0.001 * i ;
-            c[i] = 0.0;
-        }
+        c2 = (float *)aligned_malloc(size * sizeof(float), 8);
+        load_bin(datapath + "/a.bin", a, size * sizeof(float));
+        load_bin(datapath + "/b.bin", b, size * sizeof(float));
+        load_bin(datapath + "/c.bin", c, size * sizeof(float));
+        load_bin(datapath + "/c2.bin", c2, size * sizeof(float));
     }
 
     void fma(float *__restrict__ a, float *__restrict__ b, float *__restrict__ c)
@@ -43,23 +45,27 @@ public:
     bool check()
     {
         for (int i = 0; i < size; i++)
-            if (abs(c[i] - a[i] * b[i]) / (abs(c[i]) + 1.0) > 0.001)
+            if (abs(c2[i] - c[i]) > 0.001)
                 return false;
         return true;
     }
 
     void release()
     {
-        cout << "release()" << endl;
         aligned_free(a);
         aligned_free(b);
         aligned_free(c);
     }
 };
 
-int main()
+int main(int argc, const char ** argv)
 {
-    Workload *workload = new Example();
+    if (argc != 2)
+    {
+        std::cerr << "Datapath should be specify!!!" << endl;
+        return 1;
+    }
+    Workload *workload = new Example(argv[1]);
     workload->evaluate();
     return 0;
 }

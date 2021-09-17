@@ -1,5 +1,6 @@
 #include "workload.h"
 
+#include <fstream>
 #include <iostream>
 #include <time.h>
 
@@ -42,3 +43,9 @@ void Workload::evaluate()
     release();
 }
 
+void Workload::load_bin(string filename, void *data, size_t size)
+{
+    ifstream in(filename, ios::in | ios::binary);
+    in.read((char *)data, size);
+    in.close();
+}
