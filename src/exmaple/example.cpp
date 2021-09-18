@@ -62,7 +62,7 @@ int main(int argc, const char ** argv)
 {
     if (argc != 2)
     {
-        std::cerr << "Datapath should be specify!!!" << endl;
+        cerr << "Datapath should be specify!!!" << endl;
         return 1;
     }
     Workload *workload = new Example(argv[1]);

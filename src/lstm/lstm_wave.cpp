@@ -1,8 +1,14 @@
 #include "lstm.h"
 
+#include <iostream>
+
+using namespace std;
+
 class WaveLSTM : public LSTM
 {
 public:
+    WaveLSTM(string datapath) : LSTM(datapath) {}
+
     void init()
     {
         LSTM::init();
@@ -14,9 +20,14 @@ public:
     }
 };
 
-int main()
+int main(int argc, const char ** argv)
 {
-    Workload *workload = new WaveLSTM();
+    if (argc != 2)
+    {
+        cerr << "Datapath should be specify!!!" << endl;
+        return 1;
+    }
+    Workload *workload = new WaveLSTM(argv[1]);
     workload->evaluate();
     return 0;
 }

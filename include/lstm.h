@@ -1,17 +1,21 @@
 #include "workload.h"
 
+#include <string>
+
 class LSTM : public Workload
 {
 protected:
+    std::string datapath;
     float *W, *U, *bias;
     float *input, *output;
     float *output2;
-    int batch_size = 1;
-    int time_steps = 64;
-    int layer_num = 8;
-    int hidden_size = 256;
+    uint32_t batch_size;
+    uint32_t time_steps;
+    uint32_t layer_num;
+    uint32_t hidden_size;
 
 public:
+    LSTM(std::string datapath) : datapath(move(datapath)) {}
     void init();
     void run() = 0;
     bool check();

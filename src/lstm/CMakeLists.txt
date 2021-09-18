@@ -15,7 +15,7 @@ target_link_libraries(
 
 add_executable(
     lstm_wave
-    lstm_base.cpp
+    lstm_wave.cpp
 )
 
 target_link_libraries(
