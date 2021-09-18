@@ -6,9 +6,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 
 batch_size = 1
-time_steps = 2
-layer_num = 2
-hidden_size = 2
+time_steps = 64
+layer_num = 8
+hidden_size = 256
 
 model = tf.keras.Sequential()
 for _ in range(layer_num - 1):
