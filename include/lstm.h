@@ -1,5 +1,6 @@
 #include "workload.h"
 
+#include <cmath>
 #include <string>
 
 class LSTM : public Workload
@@ -20,4 +21,10 @@ public:
     void run() = 0;
     bool check();
     void release();
+
+public:
+    static inline float sigmoid(float x)
+    {
+        return 1.0f / (1.0f + expf(-x));
+    }
 };
