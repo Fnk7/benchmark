@@ -4,4 +4,4 @@ add_library(workload STATIC
 
 add_subdirectory(exmaple)
 add_subdirectory(lstm)
-
+add_subdirectory(database)
