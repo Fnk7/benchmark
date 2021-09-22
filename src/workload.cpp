@@ -46,6 +46,11 @@ void Workload::evaluate()
 void Workload::load_bin(string filename, void *data, size_t size)
 {
     ifstream in(filename, ios::in | ios::binary);
+    if (!in.is_open())
+    {
+        cerr << "File: " << filename << " not exits!" << endl;
+        return;
+    }
     in.read((char *)data, size);
     in.close();
 }
