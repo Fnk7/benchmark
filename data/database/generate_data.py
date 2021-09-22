@@ -7,10 +7,12 @@ if len(sys.argv) == 1:
     table_dir = dst_dir
 else:
     table_dir = sys.argv[1]
+size = [0] * 5
 
 # Date begin
 with open(os.path.join(table_dir, "date.tbl"), "r") as date:
     lines = date.readlines()
+    size[4] = len(lines)
     D_DATEKEY = np.empty((len(lines), ), dtype=np.uint32)
     D_DATE = [None] * len(lines)
     D_DAYOFWEEK = [None] * len(lines)
@@ -87,6 +89,7 @@ D_WEEKDAYFL = None
 # Lineorder
 with open(os.path.join(table_dir, "lineorder.tbl"), "r") as lineorder:
     lines = lineorder.readlines()
+    size[0] = len(lines)
     LO_ORDERKEY = np.empty((len(lines, )), np.uint64)
     LO_LINENUMBER = np.empty((len(lines, )), np.uint8)
     # LO_CUSTKEY = np.empty((len(lines, )), np.uint8)
@@ -164,3 +167,5 @@ LO_COMMITDATE = None
 # LO_SHIPMODE = None
 # Lineorder end
 
+size = np.array(size, dtype=np.uint32)
+size.tofile(os.path.join(dst_dir, "size.bin"))
